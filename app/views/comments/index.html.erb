@@ -1,0 +1,30 @@
+<h1>Listing comments</h1>
+
+<%= link_to "Add Comment", new_post_comment_path(@post) %>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Content</th>
+    <th>Post</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @comments.each do |comment| %>
+  <tr>
+    <td><%= comment.title %></td>
+    <td><%= comment.content %></td>
+    <td><%= comment.post_id %></td>
+    <td><%= link_to 'Show', [@post, @comment] %></td>
+    <td><%= link_to 'Edit', [@post, @comment] %></td>
+    <td><%= link_to 'Destroy', [@post, @comment], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Back to Posts', posts_path %>
+
