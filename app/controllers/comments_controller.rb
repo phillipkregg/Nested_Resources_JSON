@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
   def index
     @comments = @post.comments.all
     
-    respond_with(@post.comments)
+    respond_with(@comment)
     
   end
 
@@ -18,11 +18,9 @@ class CommentsController < ApplicationController
   # GET /comments/1.xml
   def show
     @comment = @post.comments.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @comment }
-    end
+    
+    respond_with(@comment)
+    
   end
 
   # GET /comments/new
@@ -30,10 +28,7 @@ class CommentsController < ApplicationController
   def new
     @comment = @post.comments.build
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @comment }
-    end
+    respond_with(@comment)
   end
 
   # GET /comments/1/edit
@@ -48,11 +43,13 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to(post_comments_path, :notice => 'Comment was successfully created.') }
+        format.html { redirect_to([@post, @comment], :notice => 'Comment was successfully created.') }
         format.xml  { render :xml => @comment, :status => :created, :location => @comment }
+        format.json  { render :json => @comment, :status => :created, :location => @comment }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @comment.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -66,9 +63,11 @@ class CommentsController < ApplicationController
       if @comment.update_attributes(params[:comment])
         format.html { redirect_to(@comment, :notice => 'Comment was successfully updated.') }
         format.xml  { head :ok }
+        format.json  { head :ok }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @comment.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -80,21 +79,19 @@ class CommentsController < ApplicationController
     @comment.destroy
 
     respond_to do |format|
-      format.html { redirect_to(comments_url) }
+      format.html { redirect_to(post_comments_url) }
       format.xml  { head :ok }
+      format.json  { head :ok }
     end
   end
   
   
+  protected  
   
-  
-  # For all responses in this controller, return the CORS access control headers.
-
-def cors_set_access_control_headers
-  headers['Access-Control-Allow-Origin'] = '*'
-  headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-  headers['Access-Control-Max-Age'] = "1728000"
-end
+  def get_post
+    @post = Post.find_by_id(params[:post_id])
+    redirect_to root_path unless @post
+  end
 
 
   

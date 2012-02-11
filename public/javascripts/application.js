@@ -3,9 +3,6 @@
 
 $(document).ready(function(){
 	
-	
-	
-	
 		
 		window.Navigation = Backbone.View.extend({
 		el: $("#nav"),
@@ -19,7 +16,7 @@ $(document).ready(function(){
 		},	
 		
 		render: function() {
-			$(this.el).html(this.nav).fadeIn();
+			$(this.el).html(this.nav);
 			return this;
 		}
 		
@@ -27,152 +24,128 @@ $(document).ready(function(){
 		
 		});
 	
-		window.nav = new Navigation;
 		
-		
-		window.UsersView = Backbone.View.extend({
-								
-			initialize: function() {	
-				alert("sup")			
-				_.bindAll(this, "render");
-				this.usersGrid = _.template($("#users-grid-template").html());
-				this.render().el;					
-						
-			},
+	
 			
-			render: function() {
-				
-				$(this.el).html(this.usersGrid).fadeIn();
-				return this;
-			}
-			
-		})
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	var PostsData = new kendo.data.DataSource({
-	    transport: {
-	        read: {
-	            url: "/posts",
-	            dataType: "json"
-	        }
-	    }
-	});
-	
-	
-	$("#posts-grid").kendoGrid({
-		
-		dataSource: PostsData,
-   
-        columns: [
-        {
-            field: "title",
-            title: "Title"
-        },
-        {
-            field: "content",
-            title: "Content",
-            
-    }]
-});
-	
-	
-	
 	
 	
 	window.AppRouter = Backbone.Router.extend({
-		
-		routes: {
-			'users': 'users',
-			'posts': 'posts'
+
+        routes: {
+            'users': 'users',
+            'posts': 'posts'
+
+        },
+
+        initialize: function() {            
+            var container = $("#container");
+            //container.html("#users-grid");
+            window.nav = new Navigation;	
+        },      
+
+        posts: function() {
+            var container = $("#container");
+            var postsTemplate = _.template($("#posts-grid-template").html());
+            container.empty();
+            container.html(postsTemplate).hide().fadeIn("slow");
+            
+            
+            
+            
+            var PostsData = new kendo.data.DataSource({
+			    transport: {
+			        read: "/posts.json"
+			    }
+			});
 			
-		},
-		
-		initialize: function() {			
-			this.usersView = new UsersView;
-		},
-		
-		
-		
-		posts: function() {
-			var container = $("#container");
-			container.empty();
-		},
-		
-		
-		
-		users: function() {	
 			
-			var container = $("#container");
-			container.empty();			
-			
-			container.append(this.usersView.render().el);
-			
+			$("#posts-grid").kendoGrid({
+				
+				dataSource: PostsData,
+		   
+		        columns: [
+		        {
+		            field: "title",
+		            title: "Title"
+		        },
+		        {
+		            field: "content",
+		            title: "Content",		            
+		    	}],
+		    	
+		    	detailTemplate: kendo.template($("#posts-grid-template").html()),
+		    	detailInit: detailInit 		
+			});
+            
+            
+            function detailInit(e) {
+            	
+            	// Reference current row being initialized
+            	var detailRow = e.detailRow;
+            	
+            	// Create a subgrid for the current
+            	// detail row, getting comments for the post
+            	detailRow.find(".posts-grid").kendoGrid({
+            		dataSource: {
+            			transport: {
+            				read: "comments"
+            			},
+            			
+            			schema: {
+            				data: "content"
+            			},
+            			
+            			serverFiltering: true,
+            			
+            			filter: { field: "post_id", operator: "eq", value: e.data.post_id }
+            		},
+            		
+            		columns: [{ title: "Comments", field: "content" }]
+            	})
+            	
+            }
+            
+            
+            
+        },      
+
+
+        users: function() { 
+
+            var container = $("#container");
+            usersTemplate = _.template($("#users-grid-template").html());
+            container.empty(); 
+            container.html(usersTemplate).hide().fadeIn("slow");
+
 			var UsersData = new kendo.data.DataSource({
-				    transport: {
-				        read: {
-				            url: "/users",
-				            dataType: "json"
-				        }
-				    }
-				});				
-				
-				var grid = $("#users-grid").kendoGrid({
-					
-					dataSource: UsersData,
-			   
-			        columns: [
-			        {
-			            field: "first_name",
-			            title: "First Name"
-			        },
-			        {
-			            field: "last_name",
-			            title: "Last Name",
-			            
-			    	}]
-				});
-				
-				container.append(grid);
-				
-		}
-		
-		
-		
-	});
-	
-	
-			
-	
-	
-	
-	window.App = new AppRouter();
-	Backbone.history.start();
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    
+                    transport: {
+                        read: "/users.json"
+                    }
+                });             
+
+                $("#users-grid").kendoGrid({
+
+                    dataSource: UsersData,
+
+                    columns: [
+                    {
+                        field: "first_name",
+                        title: "First Name"
+                    },
+                    {
+                        field: "last_name",
+                        title: "Last Name",
+
+                    }]
+                });                              
+        }           
+    });
+
+    window.App = new AppRouter();
+    Backbone.history.start();
+
+  
+	    
     
 // Closing jquery tag    
 });
