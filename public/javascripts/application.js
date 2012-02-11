@@ -101,7 +101,8 @@ $(document).ready(function(){
             		
             		
             		
-            		columns: [{ title: "Comments", field: "content"},
+            		columns: [{ title: "Title", field: "title"},            					
+            					 {title: "Comments", field: "content"},
             					{title: "Related Post Id", field: "post_id"}]
             	})
             	
