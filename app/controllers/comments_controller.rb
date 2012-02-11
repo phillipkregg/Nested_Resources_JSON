@@ -1,43 +1,31 @@
 class CommentsController < ApplicationController
-  # GET /comments
-  # GET /comments.xml
- 
   
   before_filter :get_post  
   
-  respond_to :html, :xml, :json
-  
+  respond_to :html, :xml, :json  
+    
   def index
-    @comments = @post.comments.all
-    
-    respond_with(@comment)
-    
+    @comments = @post.comments.all    
+    respond_with (@comments)    
   end
 
-  # GET /comments/1
-  # GET /comments/1.xml
   def show
     @comment = @post.comments.find(params[:id])
     
     respond_with(@comment)
     
   end
-
-  # GET /comments/new
-  # GET /comments/new.xml
+ 
   def new
     @comment = @post.comments.build
 
     respond_with(@comment)
   end
 
-  # GET /comments/1/edit
   def edit
     @comment = @post.comments.find(params[:id])
   end
 
-  # POST /comments
-  # POST /comments.xml
   def create
     @comment = @post.comments.build(params[:comment])
 
@@ -54,9 +42,7 @@ class CommentsController < ApplicationController
     end
   end
 
-  # PUT /comments/1
-  # PUT /comments/1.xml
-  def update
+ def update
     @comment = @post.comments.find(params[:id])
 
     respond_to do |format|
@@ -72,8 +58,6 @@ class CommentsController < ApplicationController
     end
   end
 
-  # DELETE /comments/1
-  # DELETE /comments/1.xml
   def destroy
     @comment = @post.comments.find(params[:id])
     @comment.destroy
@@ -83,8 +67,7 @@ class CommentsController < ApplicationController
       format.xml  { head :ok }
       format.json  { head :ok }
     end
-  end
-  
+  end  
   
   protected  
   
@@ -92,7 +75,5 @@ class CommentsController < ApplicationController
     @post = Post.find_by_id(params[:post_id])
     redirect_to root_path unless @post
   end
-
-
   
 end

@@ -38,17 +38,15 @@ $(document).ready(function(){
         },
 
         initialize: function() {            
-            var container = $("#container");
-            //container.html("#users-grid");
+            var container = $("#container");            
             window.nav = new Navigation;	
         },      
 
         posts: function() {
             var container = $("#container");
-            var postsTemplate = _.template($("#posts-grid-template").html());
-            container.empty();
+            postsTemplate = _.template($("#posts-grid-template").html());
+            container.empty(); 
             container.html(postsTemplate).hide().fadeIn("slow");
-            
             
             
             
@@ -83,24 +81,28 @@ $(document).ready(function(){
             	// Reference current row being initialized
             	var detailRow = e.detailRow;
             	
+            	// Testing what is coming back from e.data - it's the Post object itself
+            	//alert(e.data.id)
+            	
             	// Create a subgrid for the current
             	// detail row, getting comments for the post
-            	detailRow.find(".posts-grid").kendoGrid({
+            	detailRow.find(".comments-grid").kendoGrid({
             		dataSource: {
             			transport: {
-            				read: "comments"
+            				read: "/all_comments.json"
             			},
             			
-            			schema: {
-            				data: "content"
-            			},
             			
-            			serverFiltering: true,
+            			// Turn off server filtering and it allows filtering on the client side                 			
+            			//serverFiltering: true,
             			
-            			filter: { field: "post_id", operator: "eq", value: e.data.post_id }
+            			filter: { field: "post_id", operator: "eq", value: e.data.id }
             		},
             		
-            		columns: [{ title: "Comments", field: "content" }]
+            		
+            		
+            		columns: [{ title: "Comments", field: "content"},
+            					{title: "Related Post Id", field: "post_id"}]
             	})
             	
             }

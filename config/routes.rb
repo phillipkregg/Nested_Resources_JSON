@@ -1,7 +1,9 @@
 RoutingTutorial::Application.routes.draw do
   
+  
+  resources :users  
 
-  resources :users
+  resources :all_comments
 
   namespace :admin do
     resources :posts
