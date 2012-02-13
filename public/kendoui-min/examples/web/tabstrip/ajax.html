@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Loading content with AJAX</title>
+        <link href="../../shared/styles/examples.css" rel="stylesheet"/>
+        <link href="../../shared/styles/examples-offline.css" rel="stylesheet"/>
+        <link href="../../../styles/kendo.common.min.css" rel="stylesheet"/>
+        <link href="../../../styles/kendo.default.min.css" rel="stylesheet"/>
+        <script src="../../../js/jquery.min.js"></script>
+        <script src="../../../js/kendo.core.min.js"></script>
+        <script src="../../../js/kendo.fx.min.js"></script>
+        <script src="../../../js/kendo.tabstrip.min.js"></script>
+    </head>
+    <body>
+        <a href="../index.html">Back</a>
+        <div class="description">Loading content with AJAX</div>
+        <div id="example" class="k-content">
+            <div id="tabstrip">
+                <ul>
+                    <li class="k-state-active">
+                        First Ajax Tab
+                    </li>
+                    <li>
+                        Second Ajax Tab
+                    </li>
+                    <li>
+                        Third Ajax Tab
+                    </li>
+                    <li>
+                        Fourth Ajax Tab
+                    </li>
+                    <li>
+                        Fifth Ajax Tab
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $("#tabstrip").kendoTabStrip({
+                    contentUrls: [
+                        'ajax/ajaxContent1.html',
+                        'ajax/ajaxContent2.html',
+                        'ajax/ajaxContent3.html',
+                        'ajax/ajaxContent4.html',
+                        'ajax/ajaxContent5.html'
+                    ]
+                });
+            });
+        </script>
+    </body>
+</html>
