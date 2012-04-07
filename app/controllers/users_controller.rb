@@ -1,9 +1,12 @@
 class UsersController < ApplicationController
     
   respond_to :html, :xml, :json
+
+  
   
   def index
     @users = User.all
+
     respond_with(@users)
   end
  
@@ -36,21 +39,23 @@ class UsersController < ApplicationController
     end
   end
 
-  def update
-    @user = User.find(params[:id])
 
+
+  def update
     respond_to do |format|
-      if @user.update_attributes(params[:user])
-        format.html { redirect_to(@user, :notice => 'User was successfully updated.') }
-        format.xml  { head :ok }
-        format.json { render :json => @user }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-        format.json  { render :json => @user.errors, :status => :unprocessable_entity }
+      @test = JSON.parse(params[:models])
+      @users = JSON.parse(params[:models])
+      @users.each do |u|
+        user = User.find(u["id"])    
+        unless user.nil?
+            user.update_attributes u
+        end
       end
+      format.json { head :no_content }
     end
   end
+
+  
 
   def destroy
     @user = User.find(params[:id])

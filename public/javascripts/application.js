@@ -134,7 +134,7 @@ $(document).ready(function() {
                                     dataType: "json"
                                 },
                                 update: {
-                                    
+                                    url: "/users.json",
                                     type: "PUT"
                                 },
                                 destroy: {                                    
@@ -146,10 +146,9 @@ $(document).ready(function() {
                                 },
                                 
                                  parameterMap: function(options, operation) {
-                                    if (operation !== "read" && options.models) {
+                                    
                                         return {models: kendo.stringify(options.models)};
-                                    }
-                                }
+                                                                    }
                                 
                             },
                             batch: true,
@@ -183,20 +182,8 @@ $(document).ready(function() {
                             { command: "destroy", title: " ", width: "110px" }],
                         
                         editable: true
-                    });
+                    }); 
                 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-               
                                             
         },   
         
